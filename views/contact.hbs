@@ -10,7 +10,7 @@
     <p>You can't leave empty fields</p>
 </div>
 {{/if}}
-<form action="/contact/send-message" method="POST">
+<form action="/contact/send-message" method="POST" enctype="multipart/form-data">
     <!--enctype="multipart/form-data"-->
     <label>
         Your name: <input type="text" name="author">

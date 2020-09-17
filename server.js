@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
-
+const formidable = require('formidable');
 
 const app = express();
 
@@ -39,15 +39,25 @@ app.get('/history', (req, res) => {
 });
 
 app.post('/contact/send-message', (req, res) => {
+    const form = formidable({ multiples: true });
 
-    const { author, sender, title, message, design } = req.body;
+    form.parse(req, (err, fields, files) => {
+        console.log(files);
+        if (err) {
+            next(err);
+            return;
+        }
+        const { author, sender, title, message } = fields;
+        const { design } = files;
+        if (author && sender && title && message && design) {
+            res.render('contact', { isSent: true, design: files.design.name });
+        }
+        else {
+            res.render('contact', { isError: true });
+        }
+    });
 
-    if (author && sender && title && message && design) {
-        res.render('contact', { isSent: true, design: req.params.design});
-    }
-    else {
-        res.render('contact', { isError: true });
-    }
+
 
 });
 
